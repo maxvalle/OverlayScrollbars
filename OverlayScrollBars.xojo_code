@@ -351,7 +351,13 @@ Inherits Canvas
 		  #endif
 		  
 		  // on OS X prior to 10.7 Lion do not show overlay scrollBars
-		   if vers < 100700 then
+		  if vers < 100700 then
+		    self.visible = false
+		    return
+		  end if
+		  
+		  // check setting for the scrollbars (if not set to ignore them)
+		  if not IgnoreScrollbarSettings and not OverlayEnabled() then
 		    self.visible = false
 		    return
 		  end if
@@ -594,7 +600,7 @@ Inherits Canvas
 		  if ShowVerticalBar then
 		    
 		    // check if the vertical bar is not visible
-		    if not VerticalbarVisible then 
+		    if not VerticalbarVisible then
 		      
 		      // check if the vertical bar must be shown
 		      if VerticalBarSize < self.height - 8 then
@@ -784,11 +790,43 @@ Inherits Canvas
 		    for i as integer = 0 to n
 		      totalWidth = totalWidth + owner.Column(i).widthActual
 		    next
-		     
+		    
 		  end if
 		  
 		  return totalWidth
 		  
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
+		Private Function OverlayEnabled() As boolean
+		  
+		  dim returnValue as boolean
+		  
+		  #if targetMacOS then
+		    
+		    declare function NSClassFromString lib CocoaLib (className as CFStringRef) as ptr
+		    declare function standardUserDefaults lib CocoaLib selector "standardUserDefaults" (id as ptr) as ptr
+		    declare function stringForKey lib CocoaLib selector "stringForKey:" (id as ptr, defaultName as CFStringRef) as CFStringRef
+		    
+		    dim userDefaultsClass as ptr = NSClassFromString("NSUserDefaults")
+		    dim userDefaults as ptr = standardUserDefaults(userDefaultsClass)
+		    
+		    dim result as string = stringForKey(userDefaults, "AppleShowScrollBars")
+		    
+		    select case result
+		      
+		    case "Automatic", "WhenScrolling"
+		      returnValue = true
+		      
+		    case "Always", ""
+		      returnValue = false
+		      
+		    end select
+		    
+		  #endif
+		  
+		  return returnValue
 		End Function
 	#tag EndMethod
 
@@ -977,6 +1015,10 @@ Inherits Canvas
 		HorizontalValue As Integer
 	#tag EndComputedProperty
 
+	#tag Property, Flags = &h0
+		IgnoreScrollbarSettings As boolean
+	#tag EndProperty
+
 	#tag Property, Flags = &h21
 		Private isExpandedHorizontal As boolean
 	#tag EndProperty
@@ -1066,6 +1108,9 @@ Inherits Canvas
 	#tag EndComputedProperty
 
 
+	#tag Constant, Name = CocoaLib, Type = String, Dynamic = False, Default = \"Cocoa.framework", Scope = Public
+	#tag EndConstant
+
 	#tag Constant, Name = kBackColor, Type = Color, Dynamic = False, Default = \"&c000000F0", Scope = Private
 	#tag EndConstant
 
@@ -1148,6 +1193,13 @@ Inherits Canvas
 			Name="HorizontalValue"
 			Group="Behavior"
 			Type="Integer"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="IgnoreScrollbarSettings"
+			Visible=true
+			Group="Behavior"
+			InitialValue="False"
+			Type="boolean"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Index"

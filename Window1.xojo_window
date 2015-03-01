@@ -86,6 +86,7 @@ Begin Window Window1
          Height          =   100
          HelpTag         =   ""
          HorizontalValue =   0
+         IgnoreScrollbarSettings=   False
          Index           =   -2147483648
          InitialParent   =   "Listbox1"
          Left            =   445
