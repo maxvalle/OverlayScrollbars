@@ -8,8 +8,8 @@ Inherits Canvas
 		  
 		  if ShowVerticalBar or ShowHorizontalBar then
 		    
-		    // check if the user clicked inside the handle of vertical bar
-		    if VerticalBarVisible and VerticalBarRect.Contains(new REALbasic.Point(X, Y)) then
+		    // check if the user clicked inside vertical bar
+		    if VerticalBarVisible and isOverVerticalBar then
 		      
 		      // stop the timer, we want to keep the scrollBar visible
 		      VerticalHideTimer.mode = Timer.ModeOff
@@ -24,8 +24,13 @@ Inherits Canvas
 		        
 		      end if
 		      
-		      // keep track we are in the process of dragging the vertical bar
-		      IsVerticalBarClicked = true
+		      // check if clicked over the the handle
+		      if VerticalBarRect.Contains(new REALbasic.Point(X, Y)) then
+		        // keep track we are in the process of dragging the vertical bar
+		        IsVerticalBarClicked = true
+		      else
+		        IsVerticalScrollClicked = true
+		      end if
 		      
 		      // remember where the click occured
 		      lastY = Y
@@ -33,8 +38,8 @@ Inherits Canvas
 		      // return true to continue the drag or mouseUp
 		      return true
 		      
-		      // check if the user clicked inside the handle of horizontal bar
-		    elseif HorizontalBarVisible and HorizontalBarRect.Contains(new REALbasic.Point(X, Y)) then
+		      // check if the user clicked inside the horizontal bar
+		    elseif HorizontalBarVisible and isOverHorizontalBar then
 		      
 		      // stop the timer, we want to keep the scrollBar visible
 		      HorizontalHideTimer.mode = Timer.ModeOff
@@ -49,8 +54,13 @@ Inherits Canvas
 		        
 		      end if
 		      
-		      // keep track we are in the process of dragging the horizontal bar
-		      IsHorizontalBarClicked = true
+		      // check if clicked over the handle
+		      if HorizontalBarRect.Contains(new REALbasic.Point(X, Y)) then
+		        // keep track we are in the process of dragging the horizontal bar
+		        IsHorizontalBarClicked = true
+		      else
+		        IsHorizontalScrollClicked = true
+		      end if
 		      
 		      // remember where the click occured
 		      lastX = X
@@ -58,7 +68,7 @@ Inherits Canvas
 		      // return true to continue the drag or mouseUp
 		      return true
 		      
-		    else // clicked outside bars or bars are not to be shown
+		    else // clicked outside bars or bars are not shown
 		      
 		      // just raise the instance event
 		      return raiseEvent MouseDown(X, Y)
@@ -277,30 +287,30 @@ Inherits Canvas
 	#tag Event
 		Sub MouseUp(X As Integer, Y As Integer)
 		  
+		  if IsVerticalScrollClicked then
+		    
+		    if Y < VerticalBarRect.Top then
+		      self.VerticalValue = self.VerticalValue - self.owner.height/self.owner.RowHeight + 4
+		    else
+		      self.VerticalValue = self.VerticalValue + self.owner.height/self.owner.RowHeight - 2
+		    end if
+		    
+		  elseif IsHorizontalScrollClicked then
+		    
+		    if X < HorizontalBarRect.Left then
+		      self.HorizontalValue = self.HorizontalValue - self.owner.width
+		    else
+		      self.HorizontalValue = self.HorizontalValue + self.owner.width
+		    end if
+		    
+		  end if
 		  
-		  '// if not returning from a click on the handle
-		  'if not isInsideVerticalHandle then
-		  '
-		  '// check if the user released the mouse inside the scrollBar
-		  'if X >= 0 and X < self.width then
-		  'if Y >= 0 and Y < self.height then
-		  '
-		  '// check if released up or down the handle
-		  '// and decrement or incremente the value
-		  'if Y < VerticalBarRect.Top then
-		  'self.VerticalValue = self.VerticalValue - 1
-		  'else
-		  'self.VerticalValue = self.VerticalValue + 1
-		  'end if
-		  '
-		  'end if
-		  'end if
-		  '
-		  'end if
 		  
 		  // clear the flag to indicate bars are not clicked anymore
 		  IsVerticalBarClicked = false
+		  IsVerticalScrollClicked = false
 		  IsHorizontalBarClicked = false
+		  IsHorizontalScrollClicked = false
 		  
 		  // reset the timer to hide the vertical scrollBar
 		  // if visible and the cursor is out of both vertical and horizontal area
@@ -866,7 +876,7 @@ Inherits Canvas
 		  
 		  // calculate the vertical bar size depending on ratio
 		  
-		  return ( self.height - 2.0 ) * VerticalBarRatio - 6
+		  return max(( self.height - 2.0 ) * VerticalBarRatio - 6, 20)
 		End Function
 	#tag EndMethod
 
@@ -1032,6 +1042,10 @@ Inherits Canvas
 	#tag EndProperty
 
 	#tag Property, Flags = &h21
+		Private isHorizontalScrollClicked As boolean
+	#tag EndProperty
+
+	#tag Property, Flags = &h21
 		Private isOverHorizontalBar As boolean
 	#tag EndProperty
 
@@ -1041,6 +1055,10 @@ Inherits Canvas
 
 	#tag Property, Flags = &h21
 		Private IsVerticalBarClicked As boolean
+	#tag EndProperty
+
+	#tag Property, Flags = &h21
+		Private isVerticalScrollClicked As boolean
 	#tag EndProperty
 
 	#tag Property, Flags = &h21

@@ -49,7 +49,7 @@ Begin Window Window1
       Hierarchical    =   False
       Index           =   -2147483648
       InitialParent   =   ""
-      InitialValue    =   "1	1	1	1	1	1	1	1	1	1\n1	1	1	1	1	1	1	1	1	1\n1	1	1	1	1	1	1	1	1	1\n1	1	1	1	1	1	1	1	1	1\n1	1	1	1	1	1	1	1	1	1\n1	1	1	1	1	1	1	1	1	1\n1	1	1	1	1	1	1	1	1	1\n1	1	1	1	1	1	1	1	1	1\n1	1	1	1	1	1	1	1	1	1\n1	1	1	1	1	1	1	1	1	1\n1	1	1	1	1	1	1	1	1	1\n1	1	1	1	1	1	1	1	1	1\n1	1	1	1	1	1	1	1	1	1\n1	1	1	1	1	1	1	1	1	1\n1	1	1	1	1	1	1	1	1	1\n1	1	1	1	1	1	1	1	1	1\n1	1	1	1	1	1	1	1	1	1\n1	1	1	1	1	1	1	1	1	1\n1	1	1	1	1	1	1	1	1	1\n1	1	1	1	1	1	1	1	1	1\n1	1	1	1	1	1	1	1	1	1\n1	1	1	1	1	1	1	1	1	1\n1	1	1	1	1	1	1	1	1	1\n1	1	1	1	1	1	1	1	1	1\n1	1	1	1	1	1	1	1	1	1\n1	1	1	1	1	1	1	1	1	1\n1	1	1	1	1	1	1	1	1	1\n1	1	1	1	1	1	1	1	1	1\n1	1	1	1	1	1	1	1	1	1\n1	1	1	1	1	1	1	1	1	1\n1	1	1	1	1	1	1	1	1	1\n1	1	1	1	1	1	1	1	1	1\n1	1	1	1	1	1	1	1	1	1\n1	1	1	1	1	1	1	1	1	1\n1	1	1	1	1	1	1	1	1	1\n1	1	1	1	1	1	1	1	1	1\n1	1	1	1	1	1	1	1	1	1"
+      InitialValue    =   ""
       Italic          =   False
       Left            =   20
       LockBottom      =   True
@@ -145,6 +145,19 @@ End
 #tag EndWindow
 
 #tag WindowCode
+	#tag Event
+		Sub Open()
+		  for y as integer = 1 to 1000
+		    Listbox1.addRow ""
+		    for x as integer = 1 to 10
+		      listbox1.cell(y-1, x-1) = str(x*y, "0")
+		    next
+		  next
+		  
+		End Sub
+	#tag EndEvent
+
+
 #tag EndWindowCode
 
 #tag ViewBehavior
