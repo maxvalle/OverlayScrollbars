@@ -349,22 +349,11 @@ Inherits Canvas
 		  // check we are on the right platform
 		  dim vers as integer
 		  
-		  // for Mac check if we are on OSX 10.7> or not
-		  #if targetMacOS then
-		    vers = GetOSXVersion()
-		  #endif
-		  
 		  // on Windows do not show overlay scrollBars
 		  #if targetWin32
 		    self.visible = false
 		    return
 		  #endif
-		  
-		  // on OS X prior to 10.7 Lion do not show overlay scrollBars
-		  if vers < 100700 then
-		    self.visible = false
-		    return
-		  end if
 		  
 		  // check setting for the scrollbars (if not set to ignore them)
 		  if not IgnoreScrollbarSettings and not OverlayEnabled() then
@@ -446,6 +435,11 @@ Inherits Canvas
 		  
 		  // hijack the MouseWheel event from parent
 		  AddHandler Owner.MouseWheel, weakAddressOf OwnerMouseWheelHandler
+		  
+		  // this is a workaround to a Listbox refresh bug
+		  if not owner.border then
+		    owner.border = false
+		  end if
 		  
 		  // raise the instance event
 		  raiseEvent Open
@@ -562,35 +556,6 @@ Inherits Canvas
 		End Sub
 	#tag EndEvent
 
-
-	#tag Method, Flags = &h21
-		Private Function GetOSXVersion() As Integer
-		  
-		  // get version of OSX as an integer
-		  // with format VVSSDD where
-		  //   V = version
-		  //   S = subversion
-		  //   D = debug version
-		  // e.g: 100705 for OS version 10.7.5
-		  
-		  #if TargetMacOS
-		    
-		    static version as Integer
-		    
-		    if version = 0 then
-		      dim sys1, sys2, sys3 as Integer
-		      call System.Gestalt("sys1", sys1)
-		      call System.Gestalt("sys2", sys2)
-		      call System.Gestalt("sys3", sys3)
-		      
-		      version = 10000 * sys1 + 100 * sys2 + sys3
-		    end
-		    
-		    return version
-		    
-		  #endif
-		End Function
-	#tag EndMethod
 
 	#tag Method, Flags = &h21
 		Private Function HandleMouseWheel(X as Integer, Y as Integer, deltaX as Integer, deltaY as Integer) As Boolean
