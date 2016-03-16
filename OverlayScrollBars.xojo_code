@@ -453,11 +453,14 @@ Inherits Canvas
 		  // check if vertical bar should be made invisible
 		  if ShowVerticalBar then
 		    
+		    // this code solve a wrong redraw on the listbox, but fails in some cases due to refresh problems
+		    /////
 		    // handle the case when the listbox grown vertically but the first visible cell doesn't change
 		    // to fit the new space. fill empty cells with data
-		    if owner.listcount - VerticalValue + 1 < ( ( self.height - 2 ) / owner.rowHeight ) then
-		      VerticalValue = owner.listcount - ( ( self.height - 2 ) / owner.rowHeight ) + 1
-		    end if
+		    // if owner.listcount - VerticalValue + 1 < ( ( self.height - 2 ) / owner.rowHeight ) then
+		    // VerticalValue = owner.listcount - ( ( self.height - 2 ) / owner.rowHeight ) + 1
+		    // end if
+		    //////
 		    
 		    // if the bar is visible but need to be hidden
 		    if self.VerticalBarVisible and VerticalBarSize >= self.height - 8 then
@@ -666,7 +669,7 @@ Inherits Canvas
 		  
 		  // calculate the horizontal bar ratio to determine the size
 		  
-		  return max( self.width / ( HorizontalMaximum + self.width ), 0.05 )
+		  return max( self.width / ( HorizontalMaximum + self.width ), 0.3 )
 		  
 		End Function
 	#tag EndMethod
@@ -756,8 +759,9 @@ Inherits Canvas
 		  
 		  static totalWidth as integer
 		  static columnCount as integer = owner.columnCount
+		  static columnWidths as string = owner.ColumnWidths
 		  
-		  if totalwidth = 0 or columnCount <> owner.columnCount then
+		  if totalwidth = 0 or columnCount <> owner.columnCount or columnWidths <> owner.ColumnWidths then
 		    // parse all columns and make a sum of current column sizes
 		    totalWidth = 0
 		    dim n as integer = owner.columnCount - 1
@@ -832,7 +836,7 @@ Inherits Canvas
 		  
 		  // calculate vertical bar ratio to determine the size
 		  
-		  return max( ( self.height-2.0 ) / ( owner.listCount * owner.rowHeight ), 0.05 )
+		  return max( ( self.height-2.0 ) / ( owner.listCount * owner.rowHeight ), 0.3 )
 		End Function
 	#tag EndMethod
 
