@@ -62,6 +62,7 @@ Begin Window Window1
       ScrollbarHorizontal=   True
       ScrollBarVertical=   True
       SelectionType   =   0
+      ShowDropIndicator=   False
       TabIndex        =   0
       TabPanelIndex   =   0
       TabStop         =   True
@@ -69,6 +70,7 @@ Begin Window Window1
       TextSize        =   0.0
       TextUnit        =   0
       Top             =   14
+      Transparent     =   True
       Underline       =   False
       UseFocusRing    =   False
       Visible         =   True
@@ -129,6 +131,7 @@ Begin Window Window1
       Selectable      =   False
       TabIndex        =   1
       TabPanelIndex   =   0
+      TabStop         =   True
       Text            =   "Scroll the above Listbox to see overlay scrollbars in action."
       TextAlign       =   0
       TextColor       =   &c00000000
@@ -208,7 +211,6 @@ End
 			"7 - Global Floating Window"
 			"8 - Sheet Window"
 			"9 - Metal Window"
-			"10 - Drawer Window"
 			"11 - Modeless Dialog"
 		#tag EndEnumValues
 	#tag EndViewProperty

@@ -13,14 +13,22 @@ Inherits Canvas
 		      
 		      // stop the timer, we want to keep the scrollBar visible
 		      VerticalHideTimer.mode = Timer.ModeOff
-		      VerticalBarColor = kBarColor
+		      #if XojoVersion >= 2018.03
+		        VerticalBarColor = if(isDarkMode, kBarColorDark, kBarColorLight)
+		      #else
+		        VerticalBarColor = kBarColorLight
+		      #endif
 		      
 		      // check if the horizontal bar is visible
 		      if HorizontalBarVisible then
 		        
 		        // stop the timer even for the horizontal bar to keep it visible
 		        HorizontalHideTimer.mode = Timer.ModeOff
-		        HorizontalBarColor = kBarColor
+		        #if XojoVersion >= 2018.03
+		          HorizontalBarColor = if(isDarkMode, kBarColorDark, kBarColorLight)
+		        #else
+		          HorizontalBarColor = kBarColorLight
+		        #endif
 		        
 		      end if
 		      
@@ -43,14 +51,22 @@ Inherits Canvas
 		      
 		      // stop the timer, we want to keep the scrollBar visible
 		      HorizontalHideTimer.mode = Timer.ModeOff
-		      HorizontalBarColor = kBarColor
+		      #if XojoVersion >= 2018.03
+		        HorizontalBarColor = if(isDarkMode, kBarColorDark, kBarColorLight)
+		      #else
+		        HorizontalBarColor = kBarColorLight
+		      #endif
 		      
 		      // check if the vertical bar is visible
 		      if VerticalBarVisible then
 		        
 		        // stop the timer even for the vertical bar to keep it visible
 		        VerticalHideTimer.mode = Timer.ModeOff
-		        VerticalBarColor = kBarColor
+		        #if XojoVersion >= 2018.03
+		          VerticalBarColor = if(isDarkMode, kBarColorDark, kBarColorLight)
+		        #else
+		          VerticalBarColor = kBarColorLight
+		        #endif
 		        
 		      end if
 		      
@@ -189,7 +205,11 @@ Inherits Canvas
 		        // stop the timer, we want to keep the scrollBar visible
 		        VerticalHideTimer.mode = Timer.ModeOff
 		        VerticalBarVisible = true
-		        VerticalBarColor = kBarColor
+		        #if XojoVersion >= 2018.03
+		          VerticalBarColor = if(isDarkMode, kBarColorDark, kBarColorLight)
+		        #else
+		          VerticalBarColor = kBarColorLight
+		        #endif
 		        self.invalidate
 		        
 		      end if
@@ -200,7 +220,11 @@ Inherits Canvas
 		        // show the horizontal bar and stop the timer to keep it visible
 		        HorizontalBarVisible = true
 		        HorizontalHideTimer.mode = Timer.ModeOff
-		        HorizontalBarColor = kBarColor
+		        #if XojoVersion >= 2018.03
+		          HorizontalBarColor = if(isDarkMode, kBarColorDark, kBarColorLight)
+		        #else
+		          HorizontalBarColor = kBarColorLight
+		        #endif
 		        self.invalidate
 		        
 		      end if
@@ -241,7 +265,11 @@ Inherits Canvas
 		        // stop the timer, we want to keep the scrollBar visible
 		        HorizontalHideTimer.mode = Timer.ModeOff
 		        HorizontalBarVisible = true
-		        HorizontalBarColor = kBarColor
+		        #if XojoVersion >= 2018.03
+		          HorizontalBarColor = if(isDarkMode, kBarColorDark, kBarColorLight)
+		        #else
+		          HorizontalBarColor = kBarColorLight
+		        #endif
 		        self.invalidate
 		        
 		      end if
@@ -252,7 +280,11 @@ Inherits Canvas
 		        // show the horizontal bar and stop the timer to keep it visible
 		        VerticalBarVisible = true
 		        VerticalHideTimer.mode = Timer.ModeOff
-		        VerticalBarColor = kBarColor
+		        #if XojoVersion >= 2018.03
+		          VerticalBarColor = if(isDarkMode, kBarColorDark, kBarColorLight)
+		        #else
+		          VerticalBarColor = kBarColorLight
+		        #endif
 		        self.invalidate
 		        
 		      end if
@@ -398,8 +430,14 @@ Inherits Canvas
 		  self.lockLeft = true
 		  
 		  // set the color for the bars
-		  VerticalBarColor = kBarColor
-		  HorizontalBarColor = kBarColor
+		  #if XojoVersion >= 2018.03
+		    VerticalBarColor = if(isDarkMode, kBarColorDark, kBarColorLight)
+		    HorizontalBarColor = if(isDarkMode, kBarColorDark, kBarColorLight)
+		  #else
+		    VerticalBarColor = kBarColorLight
+		    HorizontalBarColor = kBarColorLight
+		  #endif
+		  
 		  
 		  // hide the owner listbox scrollBars
 		  owner.ScrollBarVertical = false
@@ -476,11 +514,19 @@ Inherits Canvas
 		        VerticalBarRect = new REALbasic.Rect( g.width-14, VerticalBarPosition, 11, VerticalBarSize )
 		        
 		        // draw the backgound rect
-		        g.foreColor = kBackColor
+		        #if XojoVersion >= 2018.03
+		          g.foreColor = if(isDarkMode, kBackColorDark, kBackColorLight)
+		        #else 
+		          g.foreColor = kBackColorLight
+		        #endif
 		        g.fillRect g.width-16, 1, 15, g.height-2
 		        
 		        // draw the border
-		        g.foreColor = kBorderColor
+		        #if XojoVersion >= 2018.03
+		          g.foreColor = if(isDarkMode, kBorderColorDark, kBorderColorLight)
+		        #else
+		          g.foreColor = kBorderColorLight
+		        #endif
 		        g.drawline g.width-17, 1, g.width-17, g.height-2
 		        
 		        // set the bar color
@@ -526,11 +572,19 @@ Inherits Canvas
 		        HorizontalBarRect = new REALbasic.Rect( HorizontalBarPosition, g.height-14, HorizontalBarSize, 11 )
 		        
 		        // draw the backgound rect
-		        g.foreColor = kBackColor
+		        #if XojoVersion >= 2018.03
+		          g.foreColor = if(isDarkMode, kBackColorDark, kBackColorLight)
+		        #else
+		          g.foreColor = kBackColorLight
+		        #endif
 		        g.fillRect 1, g.height-16, g.width-2, 15
 		        
 		        // draw the border
-		        g.foreColor = kBorderColor
+		        #if XojoVersion >= 2018.03
+		          g.foreColor = if(isDarkMode, kBorderColorDark, kBorderColorLight)
+		        #else
+		          g.foreColor = kBorderColorLight
+		        #endif
 		        g.drawline 1, g.height-17, g.width-2, g.height-17
 		        
 		        // set the bar color
@@ -704,7 +758,7 @@ Inherits Canvas
 		  if alpha < &HFF then
 		    
 		    // increment the alpha value of one step
-		    HorizontalBarColor = RGB( 0, 0, 0, alpha + &h20 )
+		    HorizontalBarColor = if(isDarkMode, RGB(255, 255, 255, alpha + &h20), RGB(0, 0, 0, alpha + &h20))
 		    
 		    // invalidate the rect to force redraw the bar
 		    self.invalidate( HorizontalBarRect.left, HorizontalBarRect.top, HorizontalBarRect.Width, HorizontalBarRect.height )
@@ -721,7 +775,11 @@ Inherits Canvas
 		    self.invalidate
 		    
 		    // reset the start color for the next time is shown
-		    HorizontalBarColor = kBarColor
+		    #if XojoVersion >= 2018.03
+		      HorizontalBarColor = if(isDarkMode, kBarColorDark, kBarColorLight)
+		    #else 
+		      HorizontalBarColor = kBarColorLight
+		    #endif
 		    
 		  end if
 		  
@@ -869,7 +927,11 @@ Inherits Canvas
 		  if alpha < &HFF then
 		    
 		    // increment the alpha value of one step
-		    VerticalBarColor = RGB(0, 0, 0, alpha + &h20)
+		    #if XojoVersion >= 2018.03
+		      VerticalBarColor = if(isDarkMode, RGB(255, 255, 255, alpha + &h20), RGB(0, 0, 0, alpha + &h20))
+		    #else
+		      VerticalBarColor = RGB(0, 0, 0, alpha + &h20)
+		    #endif
 		    
 		    // invalidate the rect to force redraw the bar
 		    self.invalidate( VerticalBarRect.left, VerticalBarRect.top, VerticalBarRect.Width, VerticalBarRect.height )
@@ -886,7 +948,11 @@ Inherits Canvas
 		    self.invalidate
 		    
 		    // reset the start color for the next time is shown
-		    VerticalBarColor = kBarColor
+		    #if XojoVersion >= 2018.03
+		      VerticalBarColor = if(isDarkMode, kBarColorDark, kBarColorLight)
+		    #else
+		      VerticalBarColor = kBarColorLight
+		    #endif
 		    
 		  end if
 		  
@@ -1098,13 +1164,22 @@ Inherits Canvas
 	#tag Constant, Name = CocoaLib, Type = String, Dynamic = False, Default = \"Cocoa.framework", Scope = Public
 	#tag EndConstant
 
-	#tag Constant, Name = kBackColor, Type = Color, Dynamic = False, Default = \"&c000000F0", Scope = Private
+	#tag Constant, Name = kBackColorDark, Type = Color, Dynamic = False, Default = \"&cFFFFFFEE", Scope = Private
 	#tag EndConstant
 
-	#tag Constant, Name = kBarColor, Type = Color, Dynamic = False, Default = \"&c0000007F", Scope = Private
+	#tag Constant, Name = kBackColorLight, Type = Color, Dynamic = False, Default = \"&c000000F0", Scope = Private
 	#tag EndConstant
 
-	#tag Constant, Name = kBorderColor, Type = Color, Dynamic = False, Default = \"&c000000C6", Scope = Private
+	#tag Constant, Name = kBarColorDark, Type = Color, Dynamic = False, Default = \"&cFFFFFF90", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = kBarColorLight, Type = Color, Dynamic = False, Default = \"&c0000007F", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = kBorderColorDark, Type = Color, Dynamic = False, Default = \"&cFFFFFFE6", Scope = Private
+	#tag EndConstant
+
+	#tag Constant, Name = kBorderColorLight, Type = Color, Dynamic = False, Default = \"&c000000C6", Scope = Private
 	#tag EndConstant
 
 	#tag Constant, Name = kFadeTimerPeriod, Type = Double, Dynamic = False, Default = \"50", Scope = Private
@@ -1161,6 +1236,7 @@ Inherits Canvas
 			Group="Behavior"
 			InitialValue="True"
 			Type="Boolean"
+			EditorType="Boolean"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Height"
