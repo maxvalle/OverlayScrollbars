@@ -160,17 +160,22 @@ Inherits Canvas
 		  
 		  // exiting from control should hide the bars if visible
 		  
-		  // only if mouse is up
-		  if not IsHorizontalBarClicked and not IsVerticalBarClicked then
-		    if VerticalBarVisible then
-		      isOverVerticalBar = false
-		      VerticalHideTimer.Reset
+		  // do nothing if the parent listbox is not enabled or visible
+		  if self.owner.enabled and self.owner.visible then
+		    
+		    // only if mouse is up
+		    if not IsHorizontalBarClicked and not IsVerticalBarClicked then
+		      if VerticalBarVisible then
+		        isOverVerticalBar = false
+		        VerticalHideTimer.Reset
+		      end if
+		      
+		      if HorizontalBarVisible then
+		        isOverHorizontalBar = false
+		        HorizontalHideTimer.Reset
+		      end if
 		    end if
 		    
-		    if HorizontalBarVisible then
-		      isOverHorizontalBar = false
-		      HorizontalHideTimer.Reset
-		    end if
 		  end if
 		  
 		  // raise the instance event
@@ -184,130 +189,135 @@ Inherits Canvas
 		  
 		  // if the cursor moves over a visible bar, stop the timers and keep the bars visible
 		  
-		  // check if the vertical bar is visible
-		  if VerticalBarVisible then
+		  // do nothing if the parent listbox is not enabled or visible
+		  if self.owner.enabled and self.owner.visible then
 		    
-		    // check if the cursor is over the vertical bar area
-		    if X > self.width-17 then
+		    // check if the vertical bar is visible
+		    if VerticalBarVisible then
 		      
-		      // change it only if not already set
-		      if not isOverVerticalBar then
+		      // check if the cursor is over the vertical bar area
+		      if X > self.width-17 then
 		        
-		        // mark the cursor is over vertical bar area
-		        isOverVerticalBar = true
-		        
-		        // mark the vertical bar is now expanded
-		        isExpandedVertical = true
-		        
-		        // mark the horizontal bar is no longer expanded
-		        isExpandedHorizontal = false
-		        
-		        // stop the timer, we want to keep the scrollBar visible
-		        VerticalHideTimer.mode = Timer.ModeOff
-		        VerticalBarVisible = true
-		        #if XojoVersion >= 2018.03
-		          VerticalBarColor = if(isDarkMode, kBarColorDark, kBarColorLight)
-		        #else
-		          VerticalBarColor = kBarColorLight
-		        #endif
-		        self.invalidate
-		        
-		      end if
-		      
-		      // check if the horizontal bar need to be shown
-		      if ShowHorizontalBar and ( HorizontalValue > 0 or HorizontalBarSize < self.width - 8 ) then
-		        
-		        // show the horizontal bar and stop the timer to keep it visible
-		        HorizontalBarVisible = true
-		        HorizontalHideTimer.mode = Timer.ModeOff
-		        #if XojoVersion >= 2018.03
-		          HorizontalBarColor = if(isDarkMode, kBarColorDark, kBarColorLight)
-		        #else
-		          HorizontalBarColor = kBarColorLight
-		        #endif
-		        self.invalidate
-		        
-		      end if
-		      
-		      // the cursor is no (longer) over the vertical bar area and neither in horizontal bar area
-		    elseif Y < self.height-16 then
-		      
-		      if isOverVerticalBar then
-		        isOverVerticalBar = false
-		        // restart the timer to hide the vertical bar
-		        VerticalHideTimer.Reset
-		        
-		        // check if the horizontal bar was visible
-		        if HorizontalBarVisible then
+		        // change it only if not already set
+		        if not isOverVerticalBar then
 		          
-		          // restart the timer to hide it
-		          HorizontalHideTimer.Reset
+		          // mark the cursor is over vertical bar area
+		          isOverVerticalBar = true
+		          
+		          // mark the vertical bar is now expanded
+		          isExpandedVertical = true
+		          
+		          // mark the horizontal bar is no longer expanded
+		          isExpandedHorizontal = false
+		          
+		          // stop the timer, we want to keep the scrollBar visible
+		          VerticalHideTimer.mode = Timer.ModeOff
+		          VerticalBarVisible = true
+		          #if XojoVersion >= 2018.03
+		            VerticalBarColor = if(isDarkMode, kBarColorDark, kBarColorLight)
+		          #else
+		            VerticalBarColor = kBarColorLight
+		          #endif
+		          self.invalidate
 		          
 		        end if
-		      end if
-		    end if
-		    
-		  end if
-		  
-		  
-		  // check if the horizontal bar is visible
-		  if HorizontalBarVisible then
-		    
-		    // check if the cursor is over the horizontal bar area
-		    if Y > self.height-17 then
-		      
-		      if not isOverHorizontalBar then
-		        // mark the cursor is inside horizontal bar area
-		        isOverHorizontalBar = true
-		        isExpandedHorizontal = true
-		        isExpandedVertical = false
 		        
-		        // stop the timer, we want to keep the scrollBar visible
-		        HorizontalHideTimer.mode = Timer.ModeOff
-		        HorizontalBarVisible = true
-		        #if XojoVersion >= 2018.03
-		          HorizontalBarColor = if(isDarkMode, kBarColorDark, kBarColorLight)
-		        #else
-		          HorizontalBarColor = kBarColorLight
-		        #endif
-		        self.invalidate
-		        
-		      end if
-		      
-		      // check if the vertical bar need to be shown
-		      if ShowVerticalBar and VerticalBarSize < self.height - 8 then
-		        
-		        // show the horizontal bar and stop the timer to keep it visible
-		        VerticalBarVisible = true
-		        VerticalHideTimer.mode = Timer.ModeOff
-		        #if XojoVersion >= 2018.03
-		          VerticalBarColor = if(isDarkMode, kBarColorDark, kBarColorLight)
-		        #else
-		          VerticalBarColor = kBarColorLight
-		        #endif
-		        self.invalidate
-		        
-		      end if
-		      
-		      // the cursor is no (longer) over the horizontal bar area and neither in vertical bar area
-		    elseif X < self.width-16 then
-		      
-		      if isOverHorizontalBar then
-		        isOverHorizontalBar = false
-		        
-		        // restart the timer to hide the horizontal bar
-		        HorizontalHideTimer.Reset
-		        
-		        // check if the vertical bar was visible
-		        if VerticalBarVisible then
+		        // check if the horizontal bar need to be shown
+		        if ShowHorizontalBar and ( HorizontalValue > 0 or HorizontalBarSize < self.width - 8 ) then
 		          
-		          // restart the timer to hide it
+		          // show the horizontal bar and stop the timer to keep it visible
+		          HorizontalBarVisible = true
+		          HorizontalHideTimer.mode = Timer.ModeOff
+		          #if XojoVersion >= 2018.03
+		            HorizontalBarColor = if(isDarkMode, kBarColorDark, kBarColorLight)
+		          #else
+		            HorizontalBarColor = kBarColorLight
+		          #endif
+		          self.invalidate
+		          
+		        end if
+		        
+		        // the cursor is no (longer) over the vertical bar area and neither in horizontal bar area
+		      elseif Y < self.height-16 then
+		        
+		        if isOverVerticalBar then
+		          isOverVerticalBar = false
+		          // restart the timer to hide the vertical bar
 		          VerticalHideTimer.Reset
 		          
+		          // check if the horizontal bar was visible
+		          if HorizontalBarVisible then
+		            
+		            // restart the timer to hide it
+		            HorizontalHideTimer.Reset
+		            
+		          end if
+		        end if
+		      end if
+		      
+		    end if
+		    
+		    
+		    // check if the horizontal bar is visible
+		    if HorizontalBarVisible then
+		      
+		      // check if the cursor is over the horizontal bar area
+		      if Y > self.height-17 then
+		        
+		        if not isOverHorizontalBar then
+		          // mark the cursor is inside horizontal bar area
+		          isOverHorizontalBar = true
+		          isExpandedHorizontal = true
+		          isExpandedVertical = false
+		          
+		          // stop the timer, we want to keep the scrollBar visible
+		          HorizontalHideTimer.mode = Timer.ModeOff
+		          HorizontalBarVisible = true
+		          #if XojoVersion >= 2018.03
+		            HorizontalBarColor = if(isDarkMode, kBarColorDark, kBarColorLight)
+		          #else
+		            HorizontalBarColor = kBarColorLight
+		          #endif
+		          self.invalidate
+		          
 		        end if
 		        
+		        // check if the vertical bar need to be shown
+		        if ShowVerticalBar and VerticalBarSize < self.height - 8 then
+		          
+		          // show the horizontal bar and stop the timer to keep it visible
+		          VerticalBarVisible = true
+		          VerticalHideTimer.mode = Timer.ModeOff
+		          #if XojoVersion >= 2018.03
+		            VerticalBarColor = if(isDarkMode, kBarColorDark, kBarColorLight)
+		          #else
+		            VerticalBarColor = kBarColorLight
+		          #endif
+		          self.invalidate
+		          
+		        end if
+		        
+		        // the cursor is no (longer) over the horizontal bar area and neither in vertical bar area
+		      elseif X < self.width-16 then
+		        
+		        if isOverHorizontalBar then
+		          isOverHorizontalBar = false
+		          
+		          // restart the timer to hide the horizontal bar
+		          HorizontalHideTimer.Reset
+		          
+		          // check if the vertical bar was visible
+		          if VerticalBarVisible then
+		            
+		            // restart the timer to hide it
+		            VerticalHideTimer.Reset
+		            
+		          end if
+		          
+		        end if
 		      end if
 		    end if
+		    
 		  end if
 		  
 		  // raise the instance event
@@ -370,7 +380,9 @@ Inherits Canvas
 		Function MouseWheel(X As Integer, Y As Integer, deltaX as Integer, deltaY as Integer) As Boolean
 		  
 		  // call the handler or the instance event
-		  return HandleMouseWheel( X, Y, deltaX, deltaY ) or raiseEvent MouseWheel( X, Y, deltaX, deltaY )
+		  dim handledByMe as boolean = HandleMouseWheel( X, Y, deltaX, deltaY )
+		  dim handledByInstance as boolean = raiseEvent MouseWheel( X, Y, deltaX, deltaY )
+		  return handledByMe or handledByInstance
 		  
 		End Function
 	#tag EndEvent
@@ -488,119 +500,124 @@ Inherits Canvas
 	#tag Event
 		Sub Paint(g As Graphics, areas() As REALbasic.Rect)
 		  
-		  // check if vertical bar should be made invisible
-		  if ShowVerticalBar then
+		  // do nothing if the parent listbox is not enabled or visible
+		  if self.owner.enabled and self.owner.visible then
 		    
-		    // this code solve a wrong redraw on the listbox, but fails in some cases due to refresh problems
-		    /////
-		    // handle the case when the listbox grown vertically but the first visible cell doesn't change
-		    // to fit the new space. fill empty cells with data
-		    // if owner.listcount - VerticalValue + 1 < ( ( self.height - 2 ) / owner.rowHeight ) then
-		    // VerticalValue = owner.listcount - ( ( self.height - 2 ) / owner.rowHeight ) + 1
-		    // end if
-		    //////
-		    
-		    // if the bar is visible but need to be hidden
-		    if self.VerticalBarVisible and VerticalBarSize >= self.height - 8 then
+		    // check if vertical bar should be made invisible
+		    if ShowVerticalBar then
 		      
-		      // hide the bar
-		      self.VerticalBarVisible = false
+		      // this code solve a wrong redraw on the listbox, but fails in some cases due to refresh problems
+		      /////
+		      // handle the case when the listbox grown vertically but the first visible cell doesn't change
+		      // to fit the new space. fill empty cells with data
+		      // if owner.listcount - VerticalValue + 1 < ( ( self.height - 2 ) / owner.rowHeight ) then
+		      // VerticalValue = owner.listcount - ( ( self.height - 2 ) / owner.rowHeight ) + 1
+		      // end if
+		      //////
 		      
-		      // check if bar is visible
-		    elseif self.VerticalBarVisible then
-		      
-		      if isExpandedVertical then
-		        // make a rect of the bar for easily check when the user clicks it
-		        VerticalBarRect = new REALbasic.Rect( g.width-14, VerticalBarPosition, 11, VerticalBarSize )
+		      // if the bar is visible but need to be hidden
+		      if self.VerticalBarVisible and VerticalBarSize >= self.height - 8 then
 		        
-		        // draw the backgound rect
-		        #if XojoVersion >= 2018.03
-		          g.foreColor = if(isDarkMode, kBackColorDark, kBackColorLight)
-		        #else 
-		          g.foreColor = kBackColorLight
-		        #endif
-		        g.fillRect g.width-16, 1, 15, g.height-2
+		        // hide the bar
+		        self.VerticalBarVisible = false
 		        
-		        // draw the border
-		        #if XojoVersion >= 2018.03
-		          g.foreColor = if(isDarkMode, kBorderColorDark, kBorderColorLight)
-		        #else
-		          g.foreColor = kBorderColorLight
-		        #endif
-		        g.drawline g.width-17, 1, g.width-17, g.height-2
+		        // check if bar is visible
+		      elseif self.VerticalBarVisible then
 		        
-		        // set the bar color
-		        g.foreColor = VerticalBarColor
+		        if isExpandedVertical then
+		          // make a rect of the bar for easily check when the user clicks it
+		          VerticalBarRect = new REALbasic.Rect( g.width-14, VerticalBarPosition, 11, VerticalBarSize )
+		          
+		          // draw the backgound rect
+		          #if XojoVersion >= 2018.03
+		            g.foreColor = if(isDarkMode, kBackColorDark, kBackColorLight)
+		          #else 
+		            g.foreColor = kBackColorLight
+		          #endif
+		          g.fillRect g.width-16, 1, 15, g.height-2
+		          
+		          // draw the border
+		          #if XojoVersion >= 2018.03
+		            g.foreColor = if(isDarkMode, kBorderColorDark, kBorderColorLight)
+		          #else
+		            g.foreColor = kBorderColorLight
+		          #endif
+		          g.drawline g.width-17, 1, g.width-17, g.height-2
+		          
+		          // set the bar color
+		          g.foreColor = VerticalBarColor
+		          
+		          // draw the oval bar
+		          g.fillRoundRect VerticalBarRect.left, VerticalBarRect.top, VerticalBarRect.width, VerticalBarRect.height, 20, 10
+		        else
+		          // make a rect of the bar for easily check when the user clicks it
+		          VerticalBarRect = new REALbasic.Rect( g.width-10, VerticalBarPosition, 7, VerticalBarSize )
+		          
+		          // set the bar color
+		          g.foreColor = VerticalBarColor
+		          
+		          // draw the oval bar
+		          g.fillRoundRect VerticalBarRect.left, VerticalBarRect.top, VerticalBarRect.width, VerticalBarRect.height, 20, 8
+		        end if
 		        
-		        // draw the oval bar
-		        g.fillRoundRect VerticalBarRect.left, VerticalBarRect.top, VerticalBarRect.width, VerticalBarRect.height, 20, 10
-		      else
-		        // make a rect of the bar for easily check when the user clicks it
-		        VerticalBarRect = new REALbasic.Rect( g.width-10, VerticalBarPosition, 7, VerticalBarSize )
-		        
-		        // set the bar color
-		        g.foreColor = VerticalBarColor
-		        
-		        // draw the oval bar
-		        g.fillRoundRect VerticalBarRect.left, VerticalBarRect.top, VerticalBarRect.width, VerticalBarRect.height, 20, 8
 		      end if
 		      
 		    end if
 		    
-		  end if
-		  
-		  // check if horizontal bar should be made invisible
-		  if ShowHorizontalBar then
-		    
-		    // handle the case when the listbox grown horizontally but the scroll position doesn't change
-		    // to fit the new space. fill empty space with data
-		    if HorizontalMaxWidth -  self.width < (HorizontalValue ) then
-		      HorizontalValue = HorizontalMaxWidth - ( self.width ) + 1
-		    end if
-		    
-		    // if the bar is visible but need to be hidden
-		    if self.HorizontalBarVisible and HorizontalBarSize > self.width - 8 and HorizontalValue = 0 then
+		    // check if horizontal bar should be made invisible
+		    if ShowHorizontalBar then
 		      
-		      // hide the bar
-		      self.HorizontalBarVisible = false
+		      // handle the case when the listbox grown horizontally but the scroll position doesn't change
+		      // to fit the new space. fill empty space with data
+		      if HorizontalMaxWidth -  self.width < (HorizontalValue ) then
+		        HorizontalValue = HorizontalMaxWidth - ( self.width ) + 1
+		      end if
 		      
-		      // check if bar is visible
-		    elseif self.HorizontalBarVisible then
-		      
-		      if isExpandedHorizontal then
-		        // make a rect of the bar for easily check when the user clicks it
-		        HorizontalBarRect = new REALbasic.Rect( HorizontalBarPosition, g.height-14, HorizontalBarSize, 11 )
+		      // if the bar is visible but need to be hidden
+		      if self.HorizontalBarVisible and HorizontalBarSize > self.width - 8 and HorizontalValue = 0 then
 		        
-		        // draw the backgound rect
-		        #if XojoVersion >= 2018.03
-		          g.foreColor = if(isDarkMode, kBackColorDark, kBackColorLight)
-		        #else
-		          g.foreColor = kBackColorLight
-		        #endif
-		        g.fillRect 1, g.height-16, g.width-2, 15
+		        // hide the bar
+		        self.HorizontalBarVisible = false
 		        
-		        // draw the border
-		        #if XojoVersion >= 2018.03
-		          g.foreColor = if(isDarkMode, kBorderColorDark, kBorderColorLight)
-		        #else
-		          g.foreColor = kBorderColorLight
-		        #endif
-		        g.drawline 1, g.height-17, g.width-2, g.height-17
+		        // check if bar is visible
+		      elseif self.HorizontalBarVisible then
 		        
-		        // set the bar color
-		        g.foreColor = HorizontalBarColor
+		        if isExpandedHorizontal then
+		          // make a rect of the bar for easily check when the user clicks it
+		          HorizontalBarRect = new REALbasic.Rect( HorizontalBarPosition, g.height-14, HorizontalBarSize, 11 )
+		          
+		          // draw the backgound rect
+		          #if XojoVersion >= 2018.03
+		            g.foreColor = if(isDarkMode, kBackColorDark, kBackColorLight)
+		          #else
+		            g.foreColor = kBackColorLight
+		          #endif
+		          g.fillRect 1, g.height-16, g.width-2, 15
+		          
+		          // draw the border
+		          #if XojoVersion >= 2018.03
+		            g.foreColor = if(isDarkMode, kBorderColorDark, kBorderColorLight)
+		          #else
+		            g.foreColor = kBorderColorLight
+		          #endif
+		          g.drawline 1, g.height-17, g.width-2, g.height-17
+		          
+		          // set the bar color
+		          g.foreColor = HorizontalBarColor
+		          
+		          // draw the oval bar
+		          g.fillRoundrect HorizontalBarRect.left, HorizontalBarRect.top, HorizontalBarRect.width, HorizontalBarRect.height, 10, 20
+		        else
+		          // make a rect of the bar for easily check when the user clicks it
+		          HorizontalBarRect = new REALbasic.Rect( HorizontalBarPosition, g.height-10, HorizontalBarSize, 7 )
+		          
+		          // set the bar color
+		          g.foreColor = HorizontalBarColor
+		          
+		          // draw the oval bar
+		          g.fillRoundrect HorizontalBarRect.left, HorizontalBarRect.top, HorizontalBarRect.width, HorizontalBarRect.height, 8, 20
+		        end if
 		        
-		        // draw the oval bar
-		        g.fillRoundrect HorizontalBarRect.left, HorizontalBarRect.top, HorizontalBarRect.width, HorizontalBarRect.height, 10, 20
-		      else
-		        // make a rect of the bar for easily check when the user clicks it
-		        HorizontalBarRect = new REALbasic.Rect( HorizontalBarPosition, g.height-10, HorizontalBarSize, 7 )
-		        
-		        // set the bar color
-		        g.foreColor = HorizontalBarColor
-		        
-		        // draw the oval bar
-		        g.fillRoundrect HorizontalBarRect.left, HorizontalBarRect.top, HorizontalBarRect.width, HorizontalBarRect.height, 8, 20
 		      end if
 		      
 		    end if
@@ -623,69 +640,81 @@ Inherits Canvas
 		  
 		  // this method handle the MouseWheel event coming from both this class and the owner
 		  
-		  // workaround a bug in Xojo: X, Y coordinates should be relative to control
-		  // but they are relative to the window
-		  X = X - self.left
-		  Y = Y - self.top
-		  
-		  // make visible the vertical bar if needed, with a timer to make it disappear automatically
-		  if ShowVerticalBar then
+		  // do nothing if the parent listbox is not enabled or visible
+		  if self.owner.enabled and self.owner.visible then
 		    
-		    // check if the vertical bar is not visible
-		    if not VerticalbarVisible then
+		    // workaround a bug in Xojo: X, Y coordinates should be relative to control
+		    // but they are relative to the window
+		    X = X - self.left
+		    Y = Y - self.top
+		    
+		    // make visible the vertical bar if needed, with a timer to make it disappear automatically
+		    if ShowVerticalBar then
 		      
-		      // check if the vertical bar must be shown
-		      if VerticalBarSize < self.height - 8 then
+		      // check if the vertical bar is not visible
+		      if not VerticalbarVisible then
 		        
-		        // check if the cursor is over the vertical bar area
-		        if X > self.width-17 then
-		          isExpandedVertical = true
-		          isExpandedHorizontal = false
-		          isOverVerticalBar = true
+		        // check if the vertical bar must be shown
+		        if VerticalBarSize < self.height - 8 then
+		          
+		          // check if the cursor is over the vertical bar area
+		          if X > self.width-17 then
+		            isExpandedVertical = true
+		            isExpandedHorizontal = false
+		            isOverVerticalBar = true
+		          end if
+		          
+		          // make the bar visible
+		          self.VerticalBarVisible = true
+		          
+		          // reset the timer to hide it but only if the cursor is outside the scrollbars area
+		          if not isOverVerticalBar and not isOverHorizontalBar then
+		            VerticalHideTimer.Reset
+		          end if
 		        end if
 		        
-		        // make the bar visible
-		        self.VerticalBarVisible = true
+		      else
 		        
 		        // reset the timer to hide it but only if the cursor is outside the scrollbars area
 		        if not isOverVerticalBar and not isOverHorizontalBar then
 		          VerticalHideTimer.Reset
 		        end if
-		      end if
-		      
-		    else
-		      
-		      // reset the timer to hide it but only if the cursor is outside the scrollbars area
-		      if not isOverVerticalBar and not isOverHorizontalBar then
-		        VerticalHideTimer.Reset
+		        
 		      end if
 		      
 		    end if
 		    
-		  end if
-		  
-		  
-		  // make visible the horizontal bar if needed, with a timer to make it disappear automatically
-		  if ShowHorizontalBar then
 		    
-		    // the new value of the bar from relative movement
-		    HorizontalValue = HorizontalValue + deltaX
-		    
-		    // check if the horizontal bar is not visible
-		    if not HorizontalBarVisible then
+		    // make visible the horizontal bar if needed, with a timer to make it disappear automatically
+		    if ShowHorizontalBar then
 		      
-		      // check if the horizontal bar must be shown
-		      if HorizontalValue > 0 or HorizontalBarSize < self.width - 8 then
+		      // the new value of the bar from relative movement
+		      HorizontalValue = HorizontalValue + deltaX
+		      
+		      // check if the horizontal bar is not visible
+		      if not HorizontalBarVisible then
 		        
-		        // check if the cursor is over the horizontal bar area
-		        if Y > self.height-17 then
-		          isExpandedHorizontal = true
-		          isExpandedVertical = false
-		          isOverHorizontalBar = true
+		        // check if the horizontal bar must be shown
+		        if HorizontalValue > 0 or HorizontalBarSize < self.width - 8 then
+		          
+		          // check if the cursor is over the horizontal bar area
+		          if Y > self.height-17 then
+		            isExpandedHorizontal = true
+		            isExpandedVertical = false
+		            isOverHorizontalBar = true
+		          end if
+		          
+		          // make the bar visible
+		          self.HorizontalBarVisible = true
+		          
+		          // reset the timer to hide it but only if the cursor is outside the scrollbars area
+		          if not isOverVerticalBar and not isOverHorizontalBar then
+		            HorizontalHideTimer.Reset
+		          end if
+		          
 		        end if
 		        
-		        // make the bar visible
-		        self.HorizontalBarVisible = true
+		      else
 		        
 		        // reset the timer to hide it but only if the cursor is outside the scrollbars area
 		        if not isOverVerticalBar and not isOverHorizontalBar then
@@ -694,17 +723,9 @@ Inherits Canvas
 		        
 		      end if
 		      
-		    else
-		      
-		      // reset the timer to hide it but only if the cursor is outside the scrollbars area
-		      if not isOverVerticalBar and not isOverHorizontalBar then
-		        HorizontalHideTimer.Reset
-		      end if
-		      
 		    end if
 		    
 		  end if
-		  
 		End Function
 	#tag EndMethod
 
